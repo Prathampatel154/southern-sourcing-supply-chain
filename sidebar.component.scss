@@ -1,0 +1,83 @@
+/* Sidebar Base Styles */
+.sidebar {
+  overflow-x: hidden;
+  overflow-y: auto;
+  transition: width 0.3s ease-in-out;
+}
+
+.sidebar.expanded {
+  width: 250px !important;
+}
+/* Sidebar Nav Items */
+.sidebar .nav-item {
+  width: 100%;
+}
+.sidebar .nav-link {
+  padding: 12px 16px;
+  text-decoration: none;
+  transition: background-color 0.3s ease-in-out;
+  border-radius: 8px;
+  color: white;
+  position: relative;
+}
+/* Hover state */
+.sidebar.expanded .nav-link:hover {
+  background-color: #546574;
+}
+/* Active State (Expanded) */
+.sidebar.expanded .nav-item .nav-link.active {
+  background-color: #667a8a !important;
+  color: white !important;
+}
+/* Active Icon + Highlight Background (Collapsed) */
+.sidebar:not(.expanded) .nav-item .nav-link.active {
+  position: relative;
+  z-index: 1;
+}
+.sidebar:not(.expanded) .nav-item .nav-link.active i {
+  color: black !important;
+  padding: 10px;
+  border-radius: 8px;
+  position: relative;
+  z-index: 2;
+}
+/* Blue background pill behind active icon */
+.sidebar:not(.expanded) .nav-item .nav-link.active::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 36px;
+  transform: translate(-50%, -50%);
+  width: 50px;
+  height: 50px;
+  background-color: white;
+  border-radius: 10px;
+  z-index: 1;
+}
+/* Sidebar Text */
+.menu-text {
+  opacity: 0;
+  transition: opacity 0.3s ease-in-out;
+}
+.sidebar.expanded .menu-text {
+  opacity: 1;
+}
+/* Responsive Sidebar */
+@media (max-width: 578px) {
+  .sidebar {
+    width: 70px !important;
+    height: 100% !important;
+  }
+  .sidebar.expanded {
+    width: 100% !important;
+    height: 100% !important;
+  }
+  /* Adjust active icon pill background size for mobile */
+  .sidebar:not(.expanded) .nav-item .nav-link.active::before {
+    width: 70%;
+    height: 50px;
+  }
+  .sidebar:not(.expanded) .nav-item .nav-link.active i {
+    padding: 8px;
+  }
+}

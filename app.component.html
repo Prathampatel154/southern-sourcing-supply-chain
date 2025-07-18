@@ -1,0 +1,92 @@
+<ng-container *ngIf="!isSmallScreen">
+  <nav class="navbar navbar-expand-lg navbar-light bg-light w-100" style="padding: 0 !important; height: 75px;">
+    <div class="container-fluid">
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mb-2 mb-lg-0 ms-auto">
+          <li class="nav-item" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+            <a class="nav-link" routerLink="/aboutus">About Us</a>
+          </li>
+          <li class="nav-item px-4" routerLinkActive="active">
+            <a class="nav-link" routerLink="/coinzee">Coinzee</a>
+          </li>
+          <li class="nav-item" routerLinkActive="active">
+            <a class="nav-link" routerLink="/services">Services</a>
+          </li>
+          <li class="nav-item px-4" routerLinkActive="active">
+            <a class="nav-link" routerLink="/support">Support</a>
+          </li>
+
+          <ng-container *ngIf="!isLoggedIn">
+            <li class="nav-item px-4">
+              <a class="btn btn-primary mx-2" routerLink="/login">Log In</a>
+            </li>
+            <li class="nav-item">
+              <a class="btn btn-secondary" routerLink="/signup">Sign Up</a>
+            </li>
+          </ng-container>
+
+          <ng-container *ngIf="isLoggedIn">
+            <li class="nav-item px-1">
+              <span class="nav-link">
+                Welcome, {{ username }}
+              </span>
+            </li>
+            <li class="nav-item px-1">
+              <a class="nav-link">
+                <mat-icon (click)="logout()">exit_to_app</mat-icon> 
+              </a>
+            </li>
+            <li class="nav-item px-1">
+              <a class="nav-link">
+                <mat-icon>person</mat-icon>
+              </a>
+            </li>
+            <li class="nav-item px-1">
+              <a class="nav-link">
+                <mat-icon>settings</mat-icon>
+              </a>
+            </li>
+            <li class="nav-item px-1">
+              <a class="nav-link">
+                <mat-icon>notifications</mat-icon>
+              </a>
+            </li>
+          </ng-container>
+        </ul>
+      </div>
+    </div>
+  </nav>
+</ng-container>
+
+<!-- Main Layout Wrapper -->
+<div class="row" style="min-height: 61vh;overflow: hidden;">
+    <!-- Sidebar Column (only if logged in) -->
+    <div class="col-md-3 col-lg-2 d-flex flex-column align-items-st" *ngIf="isLoggedIn">
+    <ng-container >
+      <div class="col-auto p-0">
+        <app-sidebar
+          [isExpanded]="isExpanded"
+          (toggle)="toggleSidebar()"
+          class="h-100 sidebar"
+          [ngClass]="{ 'expanded': isExpanded, 'collapsed': !isExpanded }"
+        ></app-sidebar>
+      </div>
+    </ng-container>
+    </div>
+
+    <!-- Main Content Column -->
+    <div [ngClass]="{'col-12': !isLoggedIn || isExpanded, 'col-md-9 col-lg-10': isLoggedIn && isExpanded}" class="p-0 d-flex flex-column"  style="overflow-x: hidden;">
+      <div class="flex-grow-1 d-flex flex-column" >
+        <div class="container-fluid p-0" style="width: 100%; overflow: hidden;">
+          <div class="card card-body" style="width: 100%; overflow: hidden;">
+            <router-outlet></router-outlet>
+          </div>
+        </div>
+      </div>
+    </div>
+</div>
+<div>
+  <app-footer class="footer"></app-footer>
+</div>
+
+

@@ -1,0 +1,171 @@
+<div class="container-fluid">
+  <!-- Trending Videos Section -->
+  <h2 class="text-center mb-4">Trending Videos on SouthernSourcingSupply.com</h2>
+  <div class="row">
+    <div class="col-12">
+      <div class="d-flex gap-3 overflow-auto p-3">
+        <mat-card *ngFor="let video of videos" class="card shadow-sm" style="min-width: 250px;">
+          <video 
+            [src]="video.thumbnail" 
+            class="w-100 rounded"
+            style="height: 200px; object-fit: cover;" 
+            controls
+          ></video>
+          <p class="text-center mt-2">{{ video.title }}</p>
+        </mat-card>
+      </div>
+    </div>
+  </div>
+
+  <!-- Banner and Customization Section -->
+  <div class="row pt-4">
+    <div class="col-md-6">
+      <div class="card shadow-sm">
+        <img src="/assets/images/banner.png" alt="Banner" class="img-fluid rounded" />
+      </div>
+    </div>
+
+    <div class="col-md-6 pb-3">
+      <mat-card class="shadow-sm p-3 text-center">
+        <h3>
+           Make It Yours with Coinzee! ✨<br>
+           Upload your logo and create a unique, branded masterpiece that stands out. <br>
+           Elevate your style and leave a lasting impression—customize now! 🚀<br>
+           Make a statement, stand out, and customize with confidence!
+        </h3>
+        <input type="file" class="form-control file-upload" (change)="onFileSelected($event)" accept="image/*" />
+      </mat-card>
+
+      <mat-card *ngIf="uploadedImage" class="shadow-sm text-center pt-3 d-flex flex-column align-items-center">
+        <div class="position-relative">
+          <!-- 3D Container -->
+          <div *ngIf="is3DImageAdded" class="image-container" 
+               (mousemove)="onMouseMove($event)" 
+               (mouseleave)="reset3D()">
+            <img [src]="uploadedImage" alt="Preview" class="img-fluid rounded threeD-image" width="150" height="150" />
+            
+            <!-- Overlay Image -->
+            <img *ngIf="showOverlay" [src]="overlayLogo" alt="Coinzee Logo"
+              class="position-absolute threeD-overlay"
+              [ngStyle]="{ top: overlayPosition.y + 'px', left: overlayPosition.x + 'px' }"
+              width="60" height="60" />
+          </div>
+    
+          <div *ngIf="!is3DImageAdded">
+            <img [src]="uploadedImage" alt="Preview" class="img-fluid rounded" width="150" height="150" />
+          </div>
+        </div>
+    
+        <p class="mt-2 text-muted">Click on 'Add 3D Image' to see the 3D view.</p>
+    
+        <div class="d-flex justify-content-center gap-2 mt-3 pb-3">
+          <button class="btn btn-success" (click)="addOverlay()">Add 3D Image</button>
+          <button class="btn btn-danger" (click)="resetPreview()">Remove Image</button>
+        </div>
+    
+        <div class="d-flex justify-content-center gap-2 mt-3 pb-3" *ngIf="is3DImageAdded">
+          <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#enquiryModal">Enquiry</button>
+        </div>
+      </mat-card>
+    </div>
+  </div>
+
+  <!-- Trending Products Section -->
+  <h2 class="text-center mt-5">Trending Products on SouthernSourcingSupply.com</h2>
+  <div class="row">
+    <div class="col-12">
+      <div class="d-flex gap-3 overflow-auto p-3">
+        <mat-card *ngFor="let product of products" class="card shadow-sm" style="min-width: 200px;">
+          <img [src]="product.image" alt="{{ product.title }}" class="w-100 rounded" 
+               style="height: 150px; object-fit: cover;" />
+          <p class="text-center mt-2">{{ product.title }}</p>
+        </mat-card>  
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="enquiryModal" tabindex="-1" aria-labelledby="enquiryModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 class="modal-title" id="enquiryModalLabel">Submit an Enquiry</h2>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form [formGroup]="enquiryForm" (ngSubmit)="submitEnquiry()">
+          <div class="row">
+            <div class="col-md-6 mb-3">
+              <label for="email" class="form-label">Email</label>
+              <input type="email" id="email" class="form-control" formControlName="email" required>
+              <div *ngIf="enquiryForm.get('email')?.invalid && enquiryForm.get('email')?.touched" class="text-danger">
+                Enter a valid email.
+              </div>
+            </div>
+            
+            <div class="col-md-6 mb-3">
+              <label for="contact" class="form-label">Contact</label>
+              <input type="text" id="contact" class="form-control" formControlName="contact">
+              <div *ngIf="enquiryForm.get('contact')?.invalid && enquiryForm.get('contact')?.touched" class="text-danger">
+                Contact must be exactly 10 digits.
+              </div>
+            </div>
+          </div>
+        
+          <div class="row">
+            <div class="col-md-6 mb-3">
+              <label for="first_name" class="form-label">First Name</label>
+              <input type="text" id="first_name" class="form-control" formControlName="first_name">
+              <div *ngIf="enquiryForm.get('first_name')?.invalid && enquiryForm.get('first_name')?.touched" class="text-danger">
+                First Name is required and must contain only letters.
+              </div>
+            </div>
+        
+            <div class="col-md-6 mb-3">
+              <label for="last_name" class="form-label">Last Name</label>
+              <input type="text" id="last_name" class="form-control" formControlName="last_name">
+              <div *ngIf="enquiryForm.get('last_name')?.invalid && enquiryForm.get('last_name')?.touched" class="text-danger">
+                Last Name is required and must contain only letters.
+              </div>
+            </div>
+          </div>
+        
+          <div class="row">
+            <div class="col-md-6 mb-3">
+              <label for="country" class="form-label">Country</label>
+              <input type="text" id="country" class="form-control" formControlName="country">
+            </div>
+            
+            <div class="col-md-6 mb-3">
+              <label for="image" class="form-label">Upload Image</label>
+              <input type="file" id="image" class="form-control" (change)="onFileSelected($event)">
+              <div *ngIf="uploadedImage" class="mt-2">
+                <img [src]="uploadedImage" alt="Preview" class="img-fluid rounded border" style="max-width: 150px; max-height: 150px;">
+              </div>
+            </div>
+          </div>
+        
+          <div class="row">
+            <div class="col-md-6 mb-3">
+              <label for="address" class="form-label">Address</label>
+              <textarea id="address" class="form-control" formControlName="address" rows="2"></textarea>
+              <div *ngIf="enquiryForm.get('address')?.invalid && enquiryForm.get('address')?.touched" class="text-danger">
+                Address must be at least 10 characters long.
+              </div>
+            </div>
+        
+            <div class="col-md-6 mb-3">
+              <label for="description" class="form-label">Description</label>
+              <textarea id="description" class="form-control" formControlName="description" rows="2"></textarea>
+              <div *ngIf="enquiryForm.get('description')?.invalid && enquiryForm.get('description')?.touched" class="text-danger">
+                Description must be at least 10 characters long.
+              </div>
+            </div>
+          </div>
+        
+          <button type="submit" class="btn btn-success w-100" [disabled]="enquiryForm.invalid">Submit Enquiry</button>
+        </form>        
+      </div>
+    </div>
+  </div>
+</div>

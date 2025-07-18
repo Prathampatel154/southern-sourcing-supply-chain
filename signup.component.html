@@ -1,0 +1,123 @@
+<div class="container d-flex justify-content-center">
+    <div class="row w-100 justify-content-center">
+        <div class="col-lg-6 col-md-8 col-12">
+            <div class="bg-white rounded-3 shadow-lg p-4">
+                <div class="text-center mb-4">
+                    <h2 class="text-primary">Sign Up to start with Southern Sourcing Supply</h2>
+                </div>
+                <form [formGroup]="signupForm" (ngSubmit)="onSubmit()">
+                    
+                    <div class="row">
+                        <!-- Role Select -->
+                        <div class="col-md-6 mb-3">
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="bi bi-person-badge"></i></span>
+                                <select id="roleSelect" class="form-select" formControlName="role" required>
+                                    <option value="" disabled selected>Select Role</option>
+                                    <option value="SuperAdmin">Superadmin</option>
+                                    <option value="Distributor">Distributor</option>
+                                    <option value="Vendor">Vendor</option>
+                                </select>
+                            </div>
+                            <div *ngIf="signupForm.get('role')?.touched && signupForm.get('role')?.invalid" class="text-danger">
+                                Please select a role.
+                            </div>
+                        </div>
+
+                        <!-- Full Name -->
+                        <div class="col-md-6 mb-3">
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="bi bi-person"></i></span>
+                                <input type="text" class="form-control" placeholder="Full Name" formControlName="username"
+                                    (keypress)="restrictInput($event, 'name')" required>
+                            </div>
+                            <div *ngIf="signupForm.get('username')?.touched && signupForm.get('username')?.invalid" class="text-danger">
+                                Name is required.
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <!-- Email -->
+                        <div class="col-md-12 mb-3">
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="bi bi-envelope"></i></span>
+                                <input type="email" class="form-control" placeholder="Email" formControlName="email" required>
+                            </div>
+                            <div *ngIf="signupForm.get('email')?.touched && signupForm.get('email')?.invalid" class="text-danger">
+                                <span *ngIf="signupForm.get('email')?.errors?.['required']">Email is required.</span>
+                                <span *ngIf="signupForm.get('email')?.errors?.['email']">Enter a valid email.</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <!-- Password -->
+                        <div class="col-md-6 mb-3">
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="bi bi-lock"></i></span>
+                                <input [type]="passwordVisible ? 'text' : 'password'" class="form-control" placeholder="Password" formControlName="password" required>
+                                <button type="button" class="btn btn-outline-secondary" (click)="passwordVisible = !passwordVisible">
+                                    <i class="bi" [ngClass]="passwordVisible ? 'bi-eye-slash' : 'bi-eye'"></i>
+                                </button>
+                            </div>
+                            <div *ngIf="signupForm.get('password')?.touched && signupForm.get('password')?.invalid" class="text-danger">
+                                <span *ngIf="signupForm.get('password')?.errors?.['required']">Password is required.</span>
+                                <span *ngIf="signupForm.get('password')?.errors?.['pattern']">Password must be numbers only.</span>
+                            </div>
+                        </div>
+                    
+                        <!-- Confirm Password -->
+                        <div class="col-md-6 mb-3">
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="bi bi-lock"></i></span>
+                                <input [type]="confirmPasswordVisible ? 'text' : 'password'" class="form-control" placeholder="Retype Password" formControlName="confirmPassword" required>
+                                <button type="button" class="btn btn-outline-secondary" (click)="confirmPasswordVisible = !confirmPasswordVisible">
+                                    <i class="bi" [ngClass]="confirmPasswordVisible ? 'bi-eye-slash' : 'bi-eye'"></i>
+                                </button>
+                            </div>
+                            <div *ngIf="signupForm.get('confirmPassword')?.touched && signupForm.get('confirmPassword')?.invalid" class="text-danger">
+                                <span *ngIf="signupForm.get('confirmPassword')?.errors?.['required']">Confirm Password is required.</span>
+                                <span *ngIf="signupForm.get('confirmPassword')?.errors?.['pattern']">Password must be numbers only.</span>
+                            </div>
+                            <div *ngIf="signupForm.errors?.['passwordMismatch']" class="text-danger">
+                                Passwords do not match.
+                            </div>
+                        </div>
+                    </div>                    
+
+                    <!-- Terms and Conditions -->
+                    <div class="mb-3 form-check">
+                        <input type="checkbox" class="form-check-input" id="agreeCheckbox" formControlName="agreeTerms">
+                        <label class="form-check-label" for="agreeCheckbox">
+                            I agree to the <a class="text-warning"><b>Terms</b></a>
+                        </label>
+                    </div>
+                    <div *ngIf="signupForm.get('agreeTerms')?.touched && signupForm.get('agreeTerms')?.invalid" class="text-danger">
+                        You must agree to the terms.
+                    </div>
+
+                    <!-- Submit Button -->
+                    <div class="text-center mb-3">
+                        <button type="submit" class="btn btn-primary w-100" [disabled]="signupForm.invalid">SIGN IN</button>
+                    </div>
+                </form>               
+
+                <!-- Already Have an Account -->
+                <div class="text-center">
+                    <p class="mt-2 mb-0">Already have an account? <a routerLink="/login" class="text-warning">Log In</a></p>
+                </div>
+
+                <!-- Social Login -->
+                <div class="text-center mt-2">
+                    <p class="mb-1">- Register With -</p>
+                    <div>
+                        <a class="btn btn-social-icon btn-facebook mx-2" href="#"><i class="fab fa-facebook"></i></a>
+                        <a class="btn btn-social-icon btn-twitter mx-2" href="#"><i class="fab fa-twitter"></i></a>
+                        <a class="btn btn-social-icon btn-instagram mx-2" href="#"><i class="fab fa-instagram"></i></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,202 @@
+<div class="d-flex flex-wrap justify-content-start align-items-center">
+  <!-- Create Product Button -->
+  <button *ngIf="userRole !== 'SuperAdmin'" 
+          type="button" 
+          class="btn btn-primary m-2 d-flex align-items-center"
+          data-bs-toggle="modal" 
+          data-bs-target="#productModal">
+    <mat-icon class="me-2">add_circle</mat-icon> Create Product
+  </button>
+
+  <!-- Approved Products Button -->
+  <button *ngIf="userRole !== 'SuperAdmin'" 
+          type="button" 
+          class="btn btn-primary m-2 d-flex align-items-center" 
+          (click)="fetchApprovedProducts()">
+    <mat-icon class="me-2">check_circle</mat-icon> Approved Products
+  </button>
+
+  <!-- Pending Products Button -->
+  <button *ngIf="userRole !== 'SuperAdmin'" 
+          type="button" 
+          class="btn btn-primary m-2 d-flex align-items-center" 
+          (click)="fetchPendingProducts()">
+    <mat-icon class="me-2">hourglass_empty</mat-icon> Pending Products
+  </button>
+</div>
+
+  <hr *ngIf="userRole !== 'SuperAdmin'"/>
+
+  <div class="col-sm-12 row pt-3">
+    <div class="col-sm-7">
+      <div class="d-flex" [ngClass]="{'glow-border': isHovered || isInputFocused}">
+        <i class="fa fa-filter" aria-hidden="true" style="padding-left: 15px;padding-top: 11px;color: grey;"></i>
+        <input class="form-control" (keyup)="applyFilter($event)"  type="text" [(ngModel)]="searchText" autocomplete="off" placeholder="Filter by Username or Email" 
+        (mouseenter)="onMouseEnter()"
+        (mouseleave)="onMouseLeave()"
+        (focus)="onInputFocus()"
+        (blur)="onInputBlur()">
+      </div>
+    </div>
+  </div>
+
+  <div class="pt-4"></div>
+  <div class="col-sm-12 table_info dash_table table-responsive th-s card shadow-sm get_start">
+      <table mat-table [dataSource]="dataSource" matSort class="table table-hover">
+      <ng-container matColumnDef="image">
+        <th mat-header-cell *matHeaderCellDef>Image</th>
+        <td mat-cell *matCellDef="let product"><img *ngIf="product.images?.length" [src]="product.images[0].image" 
+          alt="{{ product.details.name }}" class="product-image-thumbnail"></td>
+      </ng-container>
+
+      <ng-container matColumnDef="name">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Name </th>
+        <td mat-cell *matCellDef="let product"> {{ product.details.name }} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="price">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Price </th>
+        <td mat-cell *matCellDef="let product"> {{ product.details.price | currency }} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="category">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Category </th>
+        <td mat-cell *matCellDef="let product"> {{ product.details.category }} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="manufacturer">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Manufacturer </th>
+        <td mat-cell *matCellDef="let product"> {{ product.details.manufacturer }} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="addedBy">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Added By </th>
+        <td mat-cell *matCellDef="let product"> {{ product.addedBy }} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="actions">
+        <th mat-header-cell *matHeaderCellDef> Actions </th>
+        <td mat-cell *matCellDef="let product">
+          <button mat-icon-button color="primary" (click)="approveProduct(product.entityKey)">
+            <mat-icon>check_circle</mat-icon>
+          </button>
+          <button mat-icon-button color="warn" (click)="declineProduct(product.entityKey)">
+            <mat-icon>cancel</mat-icon>
+          </button>
+        </td>
+      </ng-container>
+
+        <!-- Header Row -->
+        <tr mat-header-row *matHeaderRowDef="displayedColumns;sticky: true"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+  
+        <tr class="mat-row" *matNoDataRow>
+          <td class="mat-cell fw-500 text-center fs-14" colspan="9">
+            <div class="text-center pt-3">
+              <span style="font-size: 18px;margin-top: 10px;">Sorry! No data found.</span>
+            </div>
+          </td> 
+        </tr>
+        </table>
+    </div>
+  <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+
+
+<div class="modal fade" id="productModal" tabindex="-1" aria-labelledby="productModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="modal-content">
+      <div class="modal-header d-flex justify-content-between align-items-center">
+        <h2 class="modal-title m-0" id="productModalLabel">Product Details</h2>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form (ngSubmit)="submitProduct(productForm)" #productForm="ngForm" class="form-container">
+          <div *ngIf="errorMessage" class="alert alert-warning">
+            {{ errorMessage }}
+          </div>
+          <div class="row">
+            <!-- Name Field -->
+            <div class="col-sm-6">
+              <div class="mb-3">
+                <label for="name" class="form-label">Name</label>
+                <input type="text" class="form-control" id="name" [(ngModel)]="product.details.name" name="name" pattern="^[a-zA-Z ]+$" #name="ngModel" required>
+                <div *ngIf="name.invalid && (name.dirty || name.touched)" class="text-danger">
+                  Name must contain only alphabets.
+                </div>
+              </div>
+            </div>
+        
+            <!-- Price Field -->
+            <div class="col-sm-6">
+              <div class="mb-3">
+                <label for="price" class="form-label">Price</label>
+                <input type="number" class="form-control" id="price" [(ngModel)]="product.details.price" name="price" #price="ngModel" required>
+                <div *ngIf="price.invalid && (price.dirty || price.touched)" class="text-danger">
+                  Price must be a number.
+                </div>
+              </div>
+            </div>
+          </div>
+        
+          <div class="row">
+            <!-- Category Field -->
+            <div class="col-sm-6">
+              <div class="mb-3">
+                <label for="category" class="form-label">Category</label>
+                <input type="text" class="form-control" id="category" [(ngModel)]="product.details.category" name="category" #category="ngModel" required>
+                <div *ngIf="category.invalid && (category.dirty || category.touched)" class="text-danger">
+                  Category is required.
+                </div>
+              </div>
+            </div>
+        
+            <!-- Manufacturer Field -->
+            <div class="col-sm-6">
+              <div class="mb-3">
+                <label for="manufacturer" class="form-label">Manufacturer</label>
+                <input type="text" class="form-control" id="manufacturer" [(ngModel)]="product.details.manufacturer" name="manufacturer" #manufacturer="ngModel" required>
+                <div *ngIf="manufacturer.invalid && (manufacturer.dirty || manufacturer.touched)" class="text-danger">
+                  Manufacturer is required.
+                </div>
+              </div>
+            </div>
+          </div>
+        
+          <div class="row">
+            <!-- Description Field -->
+            <div class="col-sm-12">
+              <div class="mb-3">
+                <label for="description" class="form-label">Description</label>
+                <textarea class="form-control" id="description" [(ngModel)]="product.details.description" name="description" #description="ngModel" required></textarea>
+                <div *ngIf="description.invalid && (description.dirty || description.touched)" class="text-danger">
+                  Description is required.
+                </div>
+              </div>
+            </div>
+          </div>
+        
+          <!-- Image Upload -->
+          <div class="mb-3">
+            <input type="file" (change)="onFileSelected($event)" accept="image/*" hidden #imageInput>
+            <button type="button" class="btn btn-outline-primary" (click)="imageInput.click()">
+              <span class="d-flex"> <mat-icon>cloud_upload</mat-icon> <span class="px-2">Upload Image</span> </span>
+            </button>
+            <span *ngIf="selectedFile" class="file-name">{{ selectedFile.name }}</span>
+            <div *ngIf="!imagePreview && submitted" class="text-danger">
+              Image is required.
+            </div>
+          </div>
+        
+          <div *ngIf="imagePreview" class="image-preview">
+            <h4>Image Preview:</h4>
+            <img height="100" width="100" [src]="imagePreview" alt="Image Preview" class="img-fluid">
+          </div>
+        
+          <!-- Submit Button -->
+          <button type="submit" class="btn btn-primary mt-3">Submit</button>
+        </form>
+        
+      </div>
+    </div>
+  </div>
+</div>

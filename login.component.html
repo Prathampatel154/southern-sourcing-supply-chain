@@ -1,0 +1,55 @@
+<div class="container d-flex justify-content-center align-items-center">
+  <div class="row w-100 justify-content-center pt-5 pb-5">
+      <div class="col-lg-4 col-md-6 col-12">
+          <div class="bg-white rounded-3 shadow-lg p-4">
+              <div class="text-center mb-4">
+                  <h2 class="text-primary mb-3">Let's Get Started</h2>
+                  <p class="mb-0">Log in to continue to Southern Sourcing Supply.</p>
+              </div>
+              <form [formGroup]="loginForm" (ngSubmit)="onLogin()">
+                  <div class="mb-3">
+                    <div class="input-group">
+                      <span class="input-group-text bg-transparent"><i class="bi bi-person"></i></span>
+                      <input type="email" class="form-control bg-transparent" placeholder="Email" formControlName="email">
+                    </div>
+                    <small *ngIf="loginForm.controls['email'].invalid && loginForm.controls['email'].touched" class="text-danger">
+                      Valid email is required.
+                    </small>
+                  </div>
+                
+                  <div class="mb-3">
+                    <div class="input-group">
+                      <span class="input-group-text bg-transparent"><i class="bi bi-lock"></i></span>
+                      <input 
+                        [type]="showPassword ? 'text' : 'password'" 
+                        class="form-control bg-transparent" 
+                        placeholder="Password" 
+                        formControlName="password">
+                      <button type="button" class="btn btn-outline-secondary" (click)="togglePasswordVisibility()">
+                        <i [class]="showPassword ? 'bi bi-eye-slash' : 'bi bi-eye'"></i>
+                      </button>
+                    </div>
+                    <small *ngIf="loginForm.controls['password'].invalid && loginForm.controls['password'].touched" class="text-danger">
+                      Password must be at least 6 characters.
+                    </small>
+                  </div>
+                  
+                  <div class="text-center mb-3">
+                    <button type="submit" class="btn btn-primary w-100" [disabled]="loginForm.invalid">LOGIN</button>
+                  </div>
+              </form>
+              <div class="text-center mt-3">
+                  <p class="mb-0">Don't have an account? <a routerLink="/signup" class="text-warning">Sign In</a></p>
+              </div>
+              <!-- <div class="text-center mt-4">
+                  <p class="mb-2">- Sign With -</p>
+                  <div>
+                      <a class="btn btn-social-icon btn-facebook mx-2"><i class="fab fa-facebook"></i></a>
+                      <a class="btn btn-social-icon btn-twitter mx-2"><i class="fab fa-twitter"></i></a>
+                      <a class="btn btn-social-icon btn-instagram mx-2"><i class="fab fa-instagram"></i></a>
+                  </div>
+              </div> -->
+          </div>
+      </div>
+  </div>
+</div>

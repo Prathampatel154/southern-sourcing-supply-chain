@@ -1,0 +1,28 @@
+.image-container {
+  perspective: 500px; /* Depth effect */
+  display: inline-block;
+}
+
+.threeD-image {
+  transition: transform 0.2s ease-out;
+  transform-style: preserve-3d;
+  box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.2);
+  border-radius: 10px;
+}
+
+.threeD-overlay {
+  transition: transform 0.2s ease-out;
+  transform-style: preserve-3d;
+}
+
+/* Add hover effect */
+.image-container:hover .threeD-image {
+  transform: rotateX(10deg) rotateY(10deg) scale(1.05);
+}
+
+.file-upload {
+  width: 60%; /* Adjust width as needed */
+  font-size: 12px; /* Reduce font size */
+  padding: 5px; /* Adjust padding */
+  margin: 5px auto; /* Center it */
+}

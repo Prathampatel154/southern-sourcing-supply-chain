@@ -1,0 +1,50 @@
+<div class="banner">
+    <!-- Left Section -->
+    <div class="left-section">
+      <div class="large-image">
+        <img src="/assets/images/headphoness.png" alt="Headphones" />
+    </div>
+      <div class="small-image">
+        <img src="/assets/images/accessories.png" alt="Accessories" />
+    </div>
+    </div>
+
+    <!-- Center Section -->
+    <div class="center-section">
+        <img src="/assets/images/airpods.png" alt="Airpods" />
+    </div>
+
+
+
+    <!-- Right Section -->
+    <div class="right-section">
+      <p class="subtitle">Make Smart Choices</p>
+      <h2>
+        Dive Into Our<br />
+        <span>Electronic Store</span>
+      </h2>
+      <p class="website">southernsourcingsupply.com</p>
+      <div class="background-bar">
+        <div>
+      <div class="quote">“Bringing Energy to Your Doorstep.”</div>
+        </div>
+    </div>
+</div>
+</div>
+  
+<!-- Circular Slider -->
+<div class="slider-container pt-5">
+  <div class="arrow left-arrow" (click)="prevSlide()">&#8592;</div>
+  <div class="slider">
+    <div
+      *ngFor="let image of sliderImages; let i = index"
+      class="slide"
+      [class.active]="i === activeSlide"
+    >
+      <img [src]="image" alt="Product" />
+    </div>
+  </div>
+  <div class="arrow right-arrow" (click)="nextSlide()">&#8594;</div>
+</div>
+
+  

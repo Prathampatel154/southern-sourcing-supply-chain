@@ -1,0 +1,18 @@
+<div class="services-container">
+  <h2 class="title">Our <span>Services</span></h2>
+
+  <!-- <div class="image-container">
+    <img src="assets/images/ssss.png" alt="Our Services">
+  </div> -->
+
+  <div class="services-grid">
+    <div class="service-card" *ngFor="let service of services">
+      <div class="icon">
+        <img [src]="service.icon" [alt]="service.title">
+      </div>
+      <h3>{{ service.title }}</h3>
+      <p>{{ service.description }}</p>
+      <a href="#" class="more-link">MORE</a>
+    </div>
+  </div>
+</div>
