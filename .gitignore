@@ -1,42 +1,38 @@
-# See http://help.github.com/ignore-files/ for more about ignoring files.
+__pycache__/
+*.py[cod]
+*$py.class
 
-# Compiled output
-/dist
-/tmp
-/out-tsc
-/bazel-out
+*.so
 
-# Node
-/node_modules
-npm-debug.log
-yarn-error.log
+**/migrations/*
 
-# IDEs and editors
-.idea/
-.project
-.classpath
-.c9/
-*.launch
-.settings/
-*.sublime-workspace
+db.sqlite3
+db.sqlite3-journal
 
-# Visual Studio Code
-.vscode/*
-!.vscode/settings.json
-!.vscode/tasks.json
-!.vscode/launch.json
-!.vscode/extensions.json
-.history/*
+*.log
+logs/
 
-# Miscellaneous
-/.angular/cache
-.sass-cache/
-/connect.lock
-/coverage
-/libpeerconnection.log
-testem.log
-/typings
+.env
+.env.*
 
-# System files
+venv/
+env/
+.venv/
+
+.vscode/
+*.swp
+*.swo
+
 .DS_Store
-Thumbs.db
+
+.tox/
+.pytest_cache/
+*.pytest_cache/
+
+.mypy_cache/
+.dmypy.json
+dmypy.json
+
+*.pid
+*.sock
+docker-compose.override.yml
